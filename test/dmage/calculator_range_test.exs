@@ -49,26 +49,26 @@ defmodule Dmage.CalculatorRangeTest do
     #normal
     assert {3.0, 2.0} == Range.damage(3, 4, 3, 4)
     assert {4.5, 1.5} == Range.damage(3, 3, 3, 3)
-    assert {16/3, 2.0} == Range.damage(4, 4, 4, 4)
-    assert {15.0, 5/3} == Range.damage(10, 4, 3, 4)
-    assert {7.5, 3.0} == Range.damage(3, 4, 5, 6)
-    assert {4/3, 1.5} == Range.damage(3, 2, 2, 3)
+    assert {5.33, 2.67} == Range.damage(4, 4, 4, 4)
+    assert {10.0, 6.67} == Range.damage(10, 4, 3, 4)
+    assert {5.0, 3.0} == Range.damage(3, 4, 5, 6)
+    assert {4.0, 1.5} == Range.damage(3, 2, 2, 3)
 
     #min
     assert {0.0, 0.0} == Range.damage(0, 4, 3, 4)
     assert {0.0, 2.0} == Range.damage(3, 6, 3, 4)
 
     #max
-    assert {0.0, 0.0} == Range.damage(3, 1, 3, 4)
-    assert {3.0, 0.0} == Range.damage(3, 1, 0, 4)
-    assert {0.0, 2.0} == Range.damage(3, 1, 3, 0)
+    assert {7.5, 2.0} == Range.damage(3, 1, 3, 4)
+    assert {7.5, 0.0} == Range.damage(3, 1, 3, 0)
+    assert {0.0, 2.0} == Range.damage(3, 1, 0, 4)
 
     #illegal
     assert {:error, "dice cannot be negative"} == Range.damage(-1, 0, 0, 0)
     assert {:error, "skill cannot be less than 1"} == Range.damage(0, 0, 0, 0)
     assert {:error, "skill cannot excced 6"} == Range.damage(0, 7, 0, 0)
-    assert {:error, "damage cannot be negative"} == Range.damage(0, 0, -1, 0)
-    assert {:error, "damage cannot be negative"} == Range.damage(0, 0, 0, -1)
+    assert {:error, "damage cannot be negative"} == Range.damage(0, 1, -1, 0)
+    assert {:error, "damage cannot be negative"} == Range.damage(0, 1, 0, -1)
   end
 
   test "calculate saves" do
