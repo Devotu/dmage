@@ -22,7 +22,7 @@ defmodule Dmage.CalculatorRangeTest do
     assert {:error, "eyes cannot excced 6"} == Range.hits(1, 7)
   end
 
-  #same as hits until rerolls appear
+  #rerolls not accounted for
   test "probable attack dice" do
     assert {1/2, 1/6} == Range.attacks(1, 3)
     assert {1/3, 1/6} == Range.attacks(1, 4)
@@ -41,7 +41,7 @@ defmodule Dmage.CalculatorRangeTest do
     assert {:error, "skill cannot excced 6"} == Range.attacks(1, 7)
   end
 
-  #same as hits until rerolls appear
+  #rerolls not accounted for
   test "probable saves" do
     dice = 3
 
@@ -78,6 +78,7 @@ defmodule Dmage.CalculatorRangeTest do
     assert {10.0, 0.0} == Range.resolve({6, 0}, {1.0, 0.5}, {2, 5})
   end
 
+  #doubling up on crits not implemented
   test "probable in open" do
     assert 5.17 == Range.probable_damage_in_open(4, 3, 3, 4, 5)
     assert 0.0 == Range.probable_damage_in_open(3, 4, 2, 3, 4)
@@ -85,6 +86,7 @@ defmodule Dmage.CalculatorRangeTest do
     assert 0.0 == Range.probable_damage_in_open(3, 5, 2, 3, 3)
   end
 
+  #doubling up on crits not implemented
   test "probable in cover" do
     assert 3.33 == Range.probable_damage_in_cover(4, 3, 3, 4, 5)
     assert 0.5 == Range.probable_damage_in_cover(3, 4, 2, 3, 4)
