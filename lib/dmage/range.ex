@@ -4,7 +4,14 @@ defmodule Dmage.Calculator.Range do
 
   def probable_damage_in_open(attacks, skill, damage_normal, damage_crit, save) do
     hits = attacks(attacks, skill)
-    saves = saves(@defence, save)
+    saves = saves(@defence, save, 0)
+    resolve(hits, saves, {damage_normal, damage_crit})
+    |> Tuple.sum()
+  end
+
+  def probable_damage_in_cover(attacks, skill, damage_normal, damage_crit, save) do
+    hits = attacks(attacks, skill)
+    saves = saves(@defence, save, 1)
     resolve(hits, saves, {damage_normal, damage_crit})
     |> Tuple.sum()
   end
@@ -25,11 +32,16 @@ defmodule Dmage.Calculator.Range do
     {normal, crit}
   end
 
-  def saves(dice, _save) when dice < 0, do: error "dice cannot be negative"
-  def saves(_dice, save) when save < 0, do: error "save cannot be negative"
-  def saves(_dice, save) when save > @faces, do: error "save cannot be greater than #{@faces}"
-  def saves(_dice, save) when save < 1, do: error "save cannot be less than 1"
-  def saves(defence, save) do
+  def saves(dice, _save, _retained) when dice < 0, do: error "dice cannot be negative"
+  def saves(_dice, save, _retained) when save < 0, do: error "save cannot be negative"
+  def saves(_dice, save, _retained) when save > @faces, do: error "save cannot be greater than #{@faces}"
+  def saves(_dice, save, _retained) when save < 1, do: error "save cannot be less than 1"
+  def saves(_dice, _save, retained) when retained > 3, do: error "retained cannot be greater than #{@defence}"
+  def saves(defence, save, retained) when retained > 0 do
+    {normal, crit} = saves(defence - retained, save, 0)
+    {normal + retained, crit}
+  end
+  def saves(defence, save, _retained) do
     normal = hits(defence, @faces - save)
     crit = hits(defence, 1)
     {normal, crit}
