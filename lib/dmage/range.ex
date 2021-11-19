@@ -1,5 +1,13 @@
 defmodule Dmage.Calculator.Range do
   @faces 6
+  @defence 3
+
+  def probable_damage_in_open(attacks, skill, damage_normal, damage_crit, save) do
+    hits = attacks(attacks, skill)
+    saves = saves(@defence, save)
+    resolve(hits, saves, {damage_normal, damage_crit})
+    |> Tuple.sum()
+  end
 
   def hits(dice, _eyes) when dice < 0, do: error "dice cannot be negative"
   def hits(_dice, eyes) when eyes < 0, do: error "eyes cannot be negative"

@@ -71,4 +71,11 @@ defmodule Dmage.CalculatorRangeTest do
     assert {2.0, 7.5} == Range.resolve({2, 2}, {1.0, 0.5}, {2, 5})
     assert {10.0, 0.0} == Range.resolve({6, 0}, {1.0, 0.5}, {2, 5})
   end
+
+  test "probable in open" do
+    assert 5.17 == Range.probable_damage_in_open(4, 3, 3, 4, 5)
+    assert 0.0 == Range.probable_damage_in_open(3, 4, 2, 3, 4)
+    assert 14.5 == Range.probable_damage_in_open(5, 3, 5, 6, 6)
+    assert 0.0 == Range.probable_damage_in_open(3, 5, 2, 3, 3)
+  end
 end
