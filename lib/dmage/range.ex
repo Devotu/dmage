@@ -33,6 +33,8 @@ defmodule Dmage.Calculator.Range do
     {damage_normal, damage_crit}
   end
 
+  def damage(hits, _damage) when hits <= 0, do: 0.0
+  def damage(_hits, damage) when damage <= 0, do: 0.0
   def damage(hits, damage) do
     hits * damage
     |> Float.round(2)
