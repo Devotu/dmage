@@ -1,10 +1,7 @@
 defmodule DmageWeb.MainLive do
   use DmageWeb, :live_view
 
-  import Dmage.Range.Calculator
-
-  @faces 6
-  @defence_dice 3
+  alias Dmage.Range.Calculator
 
   @impl true
   def mount(_params, _session, socket) do
@@ -12,25 +9,28 @@ defmodule DmageWeb.MainLive do
   end
 
   @impl true
-  def handle_event("calculate", %{"attack" => a, "skill" => s, "damage_normal" => n, "damage_crit" => c, "save" => save}, socket) do
+  def handle_event("calculate", %{"attack" => a, "skill" => s, "damage_normal" => n, "damage_crit" => c, "save" => save, "cover" => cover}, socket) do
     inputs = [a, s, n, c, save]
+    is_cover = checked? cover
+
     case is_valid_input(inputs) do
       {false, _inputs} ->
         {:noreply, put_flash(socket, :feedback, "Invalid input")}
       _ ->
-        pretty_input = inputs |> inputs_to_numbers()
-        open_normal_damage = pretty_input |> Range.normal_in_open()
-        open_crit_damage = pretty_input |> Range.crit_in_open()
+        pretty_inputs = inputs |> inputs_to_numbers()
+        damage = pretty_inputs |> calculate_damage(is_cover)
+
         result = %{
-          input: pretty_input,
-          open: %{
-            normal_damage: open_normal_damage,
-            crit_damage: open_crit_damage,
-            total_damage: open_normal_damage + open_crit_damage,
-          },
+          input: pretty_inputs,
+          cover: is_cover,
+          damage: damage,
         }
+
         {:noreply, assign(socket, results: [Kernel.inspect(result)] ++ socket.assigns.results)}
     end
+  end
+  def handle_event("calculate", input, socket) when is_map(input) do
+    handle_event("calculate", Map.put(input, "cover", "off"), socket)
   end
 
   ## Validation
@@ -63,4 +63,14 @@ defmodule DmageWeb.MainLive do
     |> Enum.map(&Integer.parse/1)
     |> Enum.map(fn {n, ""} -> n end)
   end
+
+  defp calculate_damage(inputs, false) do
+    Calculator.probable_damage_in_open inputs
+  end
+  defp calculate_damage(inputs, true) do
+    Calculator.probable_damage_in_cover inputs
+  end
+
+  defp checked?("on"), do: true
+  defp checked?(_), do: false
 end

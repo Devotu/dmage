@@ -1,38 +1,55 @@
 <section class="plaque v-space-t">
   <form phx-submit="calculate">
-    <div class="clicksize">
-      <p class="label v-space">Attack:
-        <div class="">
-          <input class="" type="number" name="attack"  step="1" value="" placeholder="A"/>
-        </div>
-      </p>
-    <div class="clicksize">
-      <p class="label v-space">Skill:
-        <div class="">
-          <input class="" type="number" name="skill"  step="1" value="" placeholder="S"/>
-        </div>
-      </p>
-    <div class="clicksize">
-      <p class="label v-space">Damage (Normal):
-        <div class="">
-          <input class="" type="number" name="damage_normal"  step="1" value="" placeholder="DN"/>
-        </div>
-      </p>
+    <div class="box">
+      <p>Weapon</p>
+      <div class="clicksize">
+        <p class="label v-space">Attack:
+          <div class="">
+            <input class="" type="number" name="attack"  step="1" value="" placeholder="A"/>
+          </div>
+        </p>
+      </div>
+      <div class="clicksize">
+        <p class="label v-space">Skill:
+          <div class="">
+            <input class="" type="number" name="skill"  step="1" value="" placeholder="S"/>
+          </div>
+        </p>
+      </div>
+      <div class="clicksize">
+        <p class="label v-space">Normal:
+          <div class="">
+            <input class="" type="number" name="damage_normal"  step="1" value="" placeholder="D (Normal)"/>
+          </div>
+        </p>
+      </div>
+      <div class="clicksize">
+        <p class="label v-space">Critical:
+          <div class="">
+            <input class="" type="number" name="damage_crit"  step="1" value="" placeholder="D (Critical)"/>
+          </div>
+        </p>
+      </div>
     </div>
-    <div class="clicksize">
-      <p class="label v-space">Damage (Crit):
-        <div class="">
-          <input class="" type="number" name="damage_crit"  step="1" value="" placeholder="DC"/>
-        </div>
-      </p>
+
+    <div class="box">
+      <p>Target</p>
+      <div class="clicksize">
+        <p class="label v-space">Save:
+          <div class="">
+            <input class="" type="number" name="save"  step="1" value="" placeholder="SV"/>
+          </div>
+        </p>
+      </div>
+      <div class="clicksize">
+        <p class="label v-space">In cover:
+          <div class="">
+            <input class="" type="checkbox" name="cover"/>
+          </div>
+        </p>
+      </div>
     </div>
-    <div class="clicksize">
-      <p class="label v-space">Save (target):
-        <div class="">
-          <input class="" type="number" name="save"  step="1" value="" placeholder="Save"/>
-        </div>
-      </p>
-    </div>
+
     <div class="flex flex-spread row append-b flex-right-row">
         <button
             class="flexi box-fill"
@@ -41,6 +58,7 @@
             Calculate
         </button>
     </div>
+
     <div class="clicksize">
     &#9856 &#9857 &#9858 &#9859 &#9860 &#9861
       <ul class="v-list">

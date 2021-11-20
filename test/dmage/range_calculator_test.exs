@@ -80,17 +80,17 @@ defmodule Dmage.CalculatorRangeTest do
 
   #doubling up on crits not implemented
   test "probable in open" do
-    assert 5.17 == Calculator.probable_damage_in_open(4, 3, 3, 4, 5)
-    assert 0.0 == Calculator.probable_damage_in_open(3, 4, 2, 3, 4)
-    assert 14.5 == Calculator.probable_damage_in_open(5, 3, 5, 6, 6)
-    assert 0.0 == Calculator.probable_damage_in_open(3, 5, 2, 3, 3)
+    assert 5.17 == Calculator.probable_damage_in_open([4, 3, 3, 4, 5])
+    assert 0.0 == Calculator.probable_damage_in_open([3, 4, 2, 3, 4])
+    assert 14.5 == Calculator.probable_damage_in_open([5, 3, 5, 6, 6])
+    assert 0.0 == Calculator.probable_damage_in_open([3, 5, 2, 3, 3])
   end
 
   #doubling up on crits not implemented
   test "probable in cover" do
-    assert 3.33 == Calculator.probable_damage_in_cover(4, 3, 3, 4, 5)
-    assert 0.5 == Calculator.probable_damage_in_cover(3, 4, 2, 3, 4)
-    assert 10.5 == Calculator.probable_damage_in_cover(5, 3, 5, 6, 6)
-    assert 0.5 == Calculator.probable_damage_in_cover(3, 5, 2, 3, 3)
+    assert 3.33 == Calculator.probable_damage_in_cover([4, 3, 3, 4, 5])
+    assert 0.5 == Calculator.probable_damage_in_cover([3, 4, 2, 3, 4])
+    assert 10.5 == Calculator.probable_damage_in_cover([5, 3, 5, 6, 6])
+    assert 0.5 == Calculator.probable_damage_in_cover([3, 5, 2, 3, 3])
   end
 end

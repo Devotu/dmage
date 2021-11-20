@@ -2,14 +2,14 @@ defmodule Dmage.Range.Calculator do
   @faces 6
   @defence 3
 
-  def probable_damage_in_open(attacks, skill, damage_normal, damage_crit, save) do
+  def probable_damage_in_open([attacks, skill, damage_normal, damage_crit, save]) do
     hits = attacks(attacks, skill)
     saves = saves(@defence, save, 0)
     resolve(hits, saves, {damage_normal, damage_crit})
     |> Tuple.sum()
   end
 
-  def probable_damage_in_cover(attacks, skill, damage_normal, damage_crit, save) do
+  def probable_damage_in_cover([attacks, skill, damage_normal, damage_crit, save]) do
     hits = attacks(attacks, skill)
     saves = saves(@defence, save, 1)
     resolve(hits, saves, {damage_normal, damage_crit})
