@@ -1,7 +1,7 @@
 defmodule DmageWeb.MainLive do
   use DmageWeb, :live_view
 
-  import Dmage.Calculator.Range
+  import Dmage.Range.Calculator
 
   @faces 6
   @defence_dice 3

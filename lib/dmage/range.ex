@@ -1,4 +1,4 @@
-defmodule Dmage.Calculator.Range do
+defmodule Dmage.Range.Calculator do
   @faces 6
   @defence 3
 
