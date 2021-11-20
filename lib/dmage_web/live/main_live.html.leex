@@ -1,5 +1,5 @@
 <section class="plaque v-space-t">
-  <form phx-submit="calculate">
+  <form phx-submit="execute">
     <div class="box">
       <p>Weapon</p>
       <div class="clicksize">
@@ -50,12 +50,28 @@
       </div>
     </div>
 
+    <div class="box">
+      <p>Method</p>
+      <div class="clicksize">
+        <p class="label v-space">Calculate
+          <div class="">
+            <input class="" type="radio" name="method" value="calc" checked/>
+          </div>
+        </p>
+        <p class="label v-space">Run 100
+          <div class="">
+            <input class="" type="radio" name="method" value="run"/>
+          </div>
+        </p>
+      </div>
+    </div>
+
     <div class="flex flex-spread row append-b flex-right-row">
         <button
             class="flexi box-fill"
-            phx-disable-with="Calculating..."
+            phx-disable-with="Executing..."
         >
-            Calculate
+            Execute
         </button>
     </div>
 

@@ -9,7 +9,7 @@ defmodule DmageWeb.MainLive do
   end
 
   @impl true
-  def handle_event("calculate", %{"attack" => a, "skill" => s, "damage_normal" => n, "damage_crit" => c, "save" => save, "cover" => cover}, socket) do
+  def handle_event("execute", %{"attack" => a, "skill" => s, "damage_normal" => n, "damage_crit" => c, "save" => save, "cover" => cover}, socket) do
     inputs = [a, s, n, c, save]
     is_cover = checked? cover
 
@@ -29,8 +29,8 @@ defmodule DmageWeb.MainLive do
         {:noreply, assign(socket, results: [Kernel.inspect(result)] ++ socket.assigns.results)}
     end
   end
-  def handle_event("calculate", input, socket) when is_map(input) do
-    handle_event("calculate", Map.put(input, "cover", "off"), socket)
+  def handle_event("execute", input, socket) when is_map(input) do
+    handle_event("execute", Map.put(input, "cover", "off"), socket)
   end
 
   ## Validation
