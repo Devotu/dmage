@@ -9,8 +9,7 @@ defmodule Dmage.Range.Runner do
   def hits(_dice, eyes) when eyes > @faces, do: error "eyes cannot excced #{@faces}"
   def hits(dice, eyes) do
     1..dice
-    |> Enum.map(fn _d -> is_hit(eyes) end)
-    |> Enum.filter(fn h -> h end)
+    |> Enum.filter(fn _d -> is_hit(eyes) end)
     |> Enum.count()
   end
 
