@@ -3,3 +3,11 @@
     padding: 10px;
     border: 1px solid black;
 }
+
+.block-row {
+    display: flex;
+}
+
+.block {
+    margin-right: 12px;
+}
