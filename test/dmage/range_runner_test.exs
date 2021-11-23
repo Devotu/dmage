@@ -4,12 +4,22 @@ defmodule Dmage.RangeRunnerTest do
   alias Dmage.Range.Calculator
   alias Dmage.Range.Runner
 
+  defp includes({t1, t2}, min, max) do
+    includes(t1, min, max) and includes(t2, min, max)
+  end
   defp includes(value, min, max) do
-    value >= min and value <= max
+    value >= min and value <= max and is_whole value
   end
 
+  defp between({t1, t2}, min, max) do
+    between(t1, min, max) and between(t2, min, max)
+  end
   defp between(value, min, max) do
-    value > min and value < max
+    value > min and value < max and is_whole value
+  end
+
+  defp is_whole(n) do
+    n == trunc n
   end
 
   test "locals" do
@@ -18,6 +28,15 @@ defmodule Dmage.RangeRunnerTest do
 
     assert between(3, 2, 4)
     refute between(2, 2, 4)
+
+    assert includes({1, 2}, 0, 5)
+    assert includes({1, 2}, 0, 5)
+
+    assert between({1, 2}, 0, 5)
+    assert between({1, 2}, 0, 5)
+
+    assert is_whole(1.0)
+    refute is_whole(1.2)
   end
 
 
@@ -43,22 +62,24 @@ defmodule Dmage.RangeRunnerTest do
 
 
   #rerolls not accounted for
-  test "probable attack dice" do
-    assert {1/2, 1/6} == Calculator.attacks(1, 3)
-    assert {1/3, 1/6} == Calculator.attacks(1, 4)
+  test "attack dice" do
+    assert includes Runner.attacks(1, 3), 0, 1
+    assert includes Runner.attacks(1, 4), 0, 1
 
-    assert {2.0, 2/3} == Calculator.attacks(4, 3)
-    assert {4/3, 2/3} == Calculator.attacks(4, 4)
+    assert includes Runner.attacks(4, 3), 0, 4
+    assert includes Runner.attacks(4, 4), 0, 4
 
     #min/max
-    assert {0.0, 0.0} == Calculator.attacks(0, 6)
-    assert {0.0, 1.0} == Calculator.attacks(6, 6)
-    assert {4.0, 1.0} == Calculator.attacks(6, 2)
+    assert {0.0, 0.0} == Runner.attacks(0, 6)
+    {hits, crits} = Runner.attacks(6, 6)
+    assert 0.0 == hits
+    assert includes crits, 0, 6
+    assert includes Runner.attacks(6, 2), 0, 6
 
     #illegal
-    assert {:error, "dice cannot be negative"} == Calculator.attacks(-1, 1)
-    assert {:error, "skill cannot be less than 2"} == Calculator.attacks(1, 1)
-    assert {:error, "skill cannot excced 6"} == Calculator.attacks(1, 7)
+    assert {:error, "dice cannot be negative"} == Runner.attacks(-1, 1)
+    assert {:error, "skill cannot be less than 2"} == Runner.attacks(1, 1)
+    assert {:error, "skill cannot excced 6"} == Runner.attacks(1, 7)
   end
 
   #rerolls not accounted for
