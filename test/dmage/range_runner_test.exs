@@ -28,6 +28,10 @@ defmodule Dmage.RangeRunnerTest do
     n == trunc n
   end
 
+  defp summs(t, n) when is_tuple(t) do
+    n == Tuple.sum(t)
+  end
+
   test "locals" do
     assert includes(3, 2, 4)
     assert includes(2, 2, 4)
@@ -49,6 +53,9 @@ defmodule Dmage.RangeRunnerTest do
 
     assert is_whole(1.0)
     refute is_whole(1.2)
+
+    assert summs {1, 2}, 3
+    refute summs {1, 2}, 4
   end
 
 
