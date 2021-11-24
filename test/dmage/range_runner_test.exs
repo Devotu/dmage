@@ -4,6 +4,9 @@ defmodule Dmage.RangeRunnerTest do
   alias Dmage.Range.Calculator
   alias Dmage.Range.Runner
 
+  defp includes({t1, t2}, {min1, min2}, {max1, max2}) do
+    includes(t1, min1, max1) and includes(t2, min2, max2)
+  end
   defp includes({t1, t2}, min, max) do
     includes(t1, min, max) and includes(t2, min, max)
   end
@@ -11,6 +14,9 @@ defmodule Dmage.RangeRunnerTest do
     value >= min and value <= max and is_whole value
   end
 
+  defp between({t1, t2}, {min1, min2}, {max1, max2}) do
+    between(t1, min1, max1) and between(t2, min2, max2)
+  end
   defp between({t1, t2}, min, max) do
     between(t1, min, max) and between(t2, min, max)
   end
@@ -71,9 +77,7 @@ defmodule Dmage.RangeRunnerTest do
 
     #min/max
     assert {0.0, 0.0} == Runner.attacks(0, 6)
-    {hits, crits} = Runner.attacks(6, 6)
-    assert 0.0 == hits
-    assert includes crits, 0, 6
+    assert includes Runner.attacks(6, 6), {0, 0}, {0, 6}
     assert includes Runner.attacks(6, 2), 0, 6
 
     #illegal
