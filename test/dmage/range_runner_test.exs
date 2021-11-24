@@ -65,17 +65,18 @@ defmodule Dmage.RangeRunnerTest do
 
     assert includes Runner.hits(6, 1), 0, 6
     assert includes Runner.hits(6, 2), 0, 6
-    assert between Runner.hits(12, 1), 0, 12
+    assert includes Runner.hits(12, 1), 0, 12
 
     #min/max
-    assert 6 == Runner.hits(6, 6)
-    assert 0 == Runner.hits(0, 6)
-    assert 0 == Runner.hits(1, 0)
+    assert includes Runner.hits(6, 5), 0, 6
+    assert {0, 0} == Runner.hits(0, 6)
+    assert {0, 0} == Runner.hits(1, 0)
 
     #illegal
     assert {:error, "dice cannot be negative"} == Runner.hits(-1, 1)
     assert {:error, "eyes cannot be negative"} == Runner.hits(1, -1)
-    assert {:error, "eyes cannot excced 6"} == Runner.hits(1, 7)
+    assert {:error, "eyes cannot be or excced 6"} == Runner.hits(1, 6)
+    assert {:error, "eyes cannot be or excced 6"} == Runner.hits(1, 7)
   end
 
 
@@ -92,6 +93,11 @@ defmodule Dmage.RangeRunnerTest do
     assert {0.0, 0.0} == Runner.attacks(0, 6)
     assert includes Runner.attacks(6, 6), {0, 0}, {0, 6}
     assert includes Runner.attacks(6, 2), 0, 6
+
+    #total dice
+    assert 1..100
+    |> Enum.filter(fn _x -> Tuple.sum(Runner.attacks(6, 2)) > 6 end)
+    |> Enum.empty?()
 
     #illegal
     assert {:error, "dice cannot be negative"} == Runner.attacks(-1, 1)
