@@ -4,7 +4,7 @@ defmodule Dmage.RangeRunnerTest do
   alias Dmage.Range.Calculator
   alias Dmage.Range.Runner
 
-  defp includes({t1, t2}, {min1, min2}, {max1, max2}) do
+  defp includes({t1, t2}, {min1, max1}, {min2, max2}) do
     includes(t1, min1, max1) and includes(t2, min2, max2)
   end
   defp includes({t1, t2}, min, max) do
@@ -14,7 +14,7 @@ defmodule Dmage.RangeRunnerTest do
     value >= min and value <= max and is_whole value
   end
 
-  defp between({t1, t2}, {min1, min2}, {max1, max2}) do
+  defp between({t1, t2}, {min1, max1}, {min2, max2}) do
     between(t1, min1, max1) and between(t2, min2, max2)
   end
   defp between({t1, t2}, min, max) do
@@ -38,8 +38,14 @@ defmodule Dmage.RangeRunnerTest do
     assert includes({1, 2}, 0, 5)
     assert includes({1, 2}, 0, 5)
 
+    assert includes({1, 2}, {0, 3}, {1, 2})
+    refute includes({1, 2}, {0, 0}, {1, 4})
+
     assert between({1, 2}, 0, 5)
     assert between({1, 2}, 0, 5)
+
+    assert between({1, 2}, {0, 5}, {0, 10})
+    refute between({1, 2}, {2, 5}, {1, 2})
 
     assert is_whole(1.0)
     refute is_whole(1.2)
