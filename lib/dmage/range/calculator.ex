@@ -56,7 +56,7 @@ defmodule Dmage.Range.Calculator do
   def damage(hits, _damage) when hits <= 0, do: 0.0
   def damage(_hits, damage) when damage <= 0, do: 0.0
   def damage(hits, damage) do
-    hits * damage
+    hits * damage * 1.0
     |> Float.round(2)
   end
 
