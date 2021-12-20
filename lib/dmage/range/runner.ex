@@ -26,15 +26,32 @@ defmodule Dmage.Range.Runner do
   def attacks(_dice, skill) when skill < 2, do: error "skill cannot be less than 2"
   def attacks(_dice, skill) when skill > @faces, do: error "skill cannot excced #{@faces}"
   def attacks(dice, skill) do
-    normal = hits(dice, @faces - skill)
-    crit = hits(dice, 1)
-    {normal, crit}
+    hits(dice, @faces - skill + 1)
+  end
+
+  def saves(0, _save, _retained), do: {0, 0}
+  def saves(dice, _save, _retained) when dice < 0, do: error "dice cannot be negative"
+  def saves(_dice, save, _retained) when save < 0, do: error "save cannot be negative"
+  def saves(_dice, save, _retained) when save > @faces, do: error "save cannot be greater than #{@faces}"
+  def saves(_dice, save, _retained) when save < 2, do: error "save cannot be less than 2"
+  def saves(_dice, _save, retained) when retained > 3, do: error "retained cannot be greater than #{@defence}"
+  def saves(defence, save, retained) when retained > 0 do
+    {normal, crit} = saves(defence - retained, save, 0)
+    {normal + retained, crit}
+  end
+  def saves(defence, save, _retained) do
+    hits(defence, @faces - save)
   end
 
 
-  defp is_hit(eyes) do
-    Enum.random(1..6) <= eyes
+  #1's always fail
+  defp is_hit(1, _from, _to), do: false
+  defp is_hit(roll, from, to) do
+    roll >= from and roll <= to
   end
+
+  defp up?(count, true), do: count + 1
+  defp up?(count, false), do: count
 
   defp error(msg) do
     {:error, msg}

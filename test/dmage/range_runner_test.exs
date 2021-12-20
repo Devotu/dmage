@@ -106,33 +106,29 @@ defmodule Dmage.RangeRunnerTest do
   end
 
   #rerolls not accounted for
-  test "probable saves" do
+  test "save dice" do
     dice = 3
 
     #normal
-    assert {0.5, 0.5} == Calculator.saves(dice, 5, 0)
-    assert {1.0, 0.5} == Calculator.saves(dice, 4, 0)
-    assert {1.5, 0.5} == Calculator.saves(dice, 3, 0)
+    assert includes Runner.saves(dice, 5, 0), 0, 3
+    assert includes Runner.saves(dice, 4, 0), 0, 3
+    assert includes Runner.saves(dice, 3, 0), 0, 3
 
     #min/max
-    assert {2.5, 0.5} == Calculator.saves(dice, 1, 0)
-    assert {0.0, 0.5} == Calculator.saves(dice, 6, 0)
-
-    #variation
-    assert {2/3, 1/3} == Calculator.saves(2, 4, 0)
-    assert {1/3, 1/6} == Calculator.saves(1, 4, 0)
-    assert {0.0, 0.0} == Calculator.saves(0, 4, 0)
+    assert includes Runner.saves(dice, 2, 0), {0, 3}, {0, 3}
+    assert includes Runner.saves(dice, 6, 0), {0, 3}, {0, 3}
+    assert includes Runner.saves(dice, 6, dice), {3, 3}, {0, 0}
 
     #retained
-    assert {2.0, 1/3} == Calculator.saves(dice, 3, 1)
-    assert {2.5, 1/6} == Calculator.saves(dice, 3, 2)
-    assert {3.0, 0.0} == Calculator.saves(dice, 3, 3)
+    assert includes Runner.saves(dice, dice, 1), {1, 3}, {0, 3}
+    assert includes Runner.saves(dice, dice, 2), {2, 3}, {0, 3}
+    assert includes Runner.saves(dice, dice, dice), {3, 3}, {0, 0}
 
     #illegal
-    assert {:error, "dice cannot be negative"} == Calculator.saves(-1, 6, 0)
-    assert {:error, "save cannot be less than 1"} == Calculator.saves(dice, 0, 0)
-    assert {:error, "save cannot be greater than 6"} == Calculator.saves(dice, 7, 0)
-    assert {:error, "retained cannot be greater than 3"} == Calculator.saves(dice, 4, 4)
+    assert {:error, "dice cannot be negative"} == Runner.saves(-1, 6, 0)
+    assert {:error, "save cannot be less than 2"} == Runner.saves(dice, 1, 0)
+    assert {:error, "save cannot be greater than 6"} == Runner.saves(dice, 7, 0)
+    assert {:error, "retained cannot be greater than 3"} == Runner.saves(dice, 4, 4)
   end
 
   test "resolve probable" do
