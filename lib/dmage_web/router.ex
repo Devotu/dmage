@@ -18,6 +18,8 @@ defmodule DmageWeb.Router do
     pipe_through :browser
 
     live "/", MainLive, :index
+    live "/range", RangeLive, :index
+    live "/ranged", RangeLive, :index
   end
 
   # Other scopes may use custom stacks.
