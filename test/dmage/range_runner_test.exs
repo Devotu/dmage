@@ -132,10 +132,16 @@ defmodule Dmage.RangeRunnerTest do
   end
 
   test "resolve probable" do
-    assert {3.0, 0.67} == Calculator.resolve({2.0, 2/3}, {1.0, 0.5}, {3, 4})
-    assert {4.5, 0.0} == Calculator.resolve({2.5, 1}, {1.0, 1}, {3, 4})
-    assert {2.0, 7.5} == Calculator.resolve({2, 2}, {1.0, 0.5}, {2, 5})
-    assert {10.0, 0.0} == Calculator.resolve({6, 0}, {1.0, 0.5}, {2, 5})
+    #normal
+    assert {6.0, 4.0} == Calculator.resolve({2, 1}, {0, 0}, {3, 4})
+    assert {3.0, 4.0} == Calculator.resolve({2, 1}, {1, 0}, {3, 4})
+    assert {3.0, 0.0} == Calculator.resolve({2, 1}, {1, 1}, {3, 4})
+    assert {0.0, 0.0} == Calculator.resolve({2, 1}, {2, 1}, {3, 4})
+    assert {0.0, 0.0} == Calculator.resolve({2, 1}, {3, 1}, {3, 4})
+    assert {0.0, 0.0} == Calculator.resolve({2, 1}, {3, 2}, {3, 4})
+    assert {0.0, 0.0} == Calculator.resolve({0, 0}, {3, 2}, {3, 4})
+    assert {2.0, 5.0} == Calculator.resolve({2, 2}, {1, 1}, {2, 5})
+    assert {10.0, 0.0} == Calculator.resolve({6, 0}, {1, 0}, {2, 5})
   end
 
   #doubling up on crits not implemented
