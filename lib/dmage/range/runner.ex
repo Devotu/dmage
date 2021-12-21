@@ -43,6 +43,52 @@ defmodule Dmage.Range.Runner do
     hits(defence, @faces - save)
   end
 
+  def resolve({hits_normal, hits_crit} = hits, saves, {damage_normal, damage_crit} = damage) do
+    {saves_normal, saves_crit} = convert_saves(hits, saves, damage)
+    damage_normal = damage(hits_normal - saves_normal, damage_normal)
+    damage_crit = damage(hits_crit - saves_crit, damage_crit)
+    {damage_normal, damage_crit}
+  end
+
+  def damage(hits, _damage) when hits <= 0, do: 0.0
+  def damage(_hits, damage) when damage <= 0, do: 0.0
+  def damage(hits, damage) do
+    hits * damage * 1.0
+    |> Float.round(2)
+  end
+
+  defp convert_saves({_hits_normal, 0}, saves, _damage) do
+    saves
+  end
+  defp convert_saves(_hits, {saves_normal, _saves_crit} = saves, _damage)
+  when saves_normal < 2 do
+    saves
+  end
+  defp convert_saves({_hits_normal, hits_crit}, {_saves_normal, saves_crit} = saves, _damage)
+  when saves_crit == hits_crit do
+    saves
+  end
+  defp convert_saves({_hits_normal, hits_crit}, {saves_normal, saves_crit}, _damage)
+  when saves_crit > hits_crit do
+    excess_crit_saves = saves_crit - hits_crit
+    {saves_normal + excess_crit_saves, saves_crit - excess_crit_saves}
+  end
+  defp convert_saves(hits, saves, {damage_normal, damage_crit} = damage)
+  when damage_crit >= 2 * damage_normal do
+    convert_saves(hits, bump_one_crit_save(saves), damage)
+  end
+  defp convert_saves({hits_normal, _hits_crit} = hits, {saves_normal, _saves_crit} = saves, damage)
+  when (saves_normal - hits_normal) >= 1 do
+    convert_saves(hits, bump_one_crit_save(saves), damage)
+  end
+  defp convert_saves(_hits, saves, _damage) do
+    saves
+  end
+
+  defp bump_one_crit_save({saves_normal, saves_crit}) do
+    {saves_normal - 2, saves_crit + 1}
+  end
+
 
   #1's always fail
   defp is_hit(1, _from, _to), do: false

@@ -1,7 +1,6 @@
 defmodule Dmage.RangeRunnerTest do
   use ExUnit.Case
 
-  alias Dmage.Range.Calculator
   alias Dmage.Range.Runner
 
   defp includes({t1, t2}, {min1, max1}, {min2, max2}) do
@@ -133,30 +132,25 @@ defmodule Dmage.RangeRunnerTest do
 
   test "resolve probable" do
     #normal
-    assert {6.0, 4.0} == Calculator.resolve({2, 1}, {0, 0}, {3, 4})
-    assert {3.0, 4.0} == Calculator.resolve({2, 1}, {1, 0}, {3, 4})
-    assert {3.0, 0.0} == Calculator.resolve({2, 1}, {1, 1}, {3, 4})
-    assert {0.0, 0.0} == Calculator.resolve({2, 1}, {2, 1}, {3, 4})
-    assert {0.0, 0.0} == Calculator.resolve({2, 1}, {3, 1}, {3, 4})
-    assert {0.0, 0.0} == Calculator.resolve({2, 1}, {3, 2}, {3, 4})
-    assert {0.0, 0.0} == Calculator.resolve({0, 0}, {3, 2}, {3, 4})
-    assert {2.0, 5.0} == Calculator.resolve({2, 2}, {1, 1}, {2, 5})
-    assert {10.0, 0.0} == Calculator.resolve({6, 0}, {1, 0}, {2, 5})
-  end
+    #whole
+    assert {6.0, 4.0} == Runner.resolve({2, 1}, {0, 0}, {3, 4})
+    assert {3.0, 4.0} == Runner.resolve({2, 1}, {1, 0}, {3, 4})
+    assert {3.0, 0.0} == Runner.resolve({2, 1}, {1, 1}, {3, 4})
+    assert {0.0, 0.0} == Runner.resolve({2, 1}, {2, 1}, {3, 4})
+    assert {0.0, 0.0} == Runner.resolve({2, 1}, {3, 1}, {3, 4})
+    assert {0.0, 0.0} == Runner.resolve({2, 1}, {3, 2}, {3, 4})
+    assert {0.0, 0.0} == Runner.resolve({0, 0}, {3, 2}, {3, 4})
+    assert {2.0, 5.0} == Runner.resolve({2, 2}, {1, 1}, {2, 5})
+    assert {10.0, 0.0} == Runner.resolve({6, 0}, {1, 0}, {2, 5})
 
-  #doubling up on crits not implemented
-  test "probable in open" do
-    assert 5.17 == Calculator.probable_damage_in_open([4, 3, 3, 4, 5])
-    assert 0.0 == Calculator.probable_damage_in_open([3, 4, 2, 3, 4])
-    assert 14.5 == Calculator.probable_damage_in_open([5, 3, 5, 6, 6])
-    assert 0.0 == Calculator.probable_damage_in_open([3, 5, 2, 3, 3])
-  end
+    #crit
+    assert {0.0, 0.0} == Runner.resolve({0, 1}, {2, 0}, {3, 5})
+    assert {3.0, 0.0} == Runner.resolve({1, 1}, {2, 0}, {3, 5})
+    assert {3.0, 0.0} == Runner.resolve({1, 1}, {2, 0}, {3, 4})
 
-  #doubling up on crits not implemented
-  test "probable in cover" do
-    assert 3.33 == Calculator.probable_damage_in_cover([4, 3, 3, 4, 5])
-    assert 0.5 == Calculator.probable_damage_in_cover([3, 4, 2, 3, 4])
-    assert 10.5 == Calculator.probable_damage_in_cover([5, 3, 5, 6, 6])
-    assert 0.5 == Calculator.probable_damage_in_cover([3, 5, 2, 3, 3])
+    assert {0.0, 4.0} == Runner.resolve({2, 1}, {2, 0}, {3, 4})
+    assert {4.0, 0.0} == Runner.resolve({2, 1}, {2, 0}, {2, 4})
+
+    assert {2.0, 0.0} == Runner.resolve({1, 2}, {4, 0}, {2, 4})
   end
 end

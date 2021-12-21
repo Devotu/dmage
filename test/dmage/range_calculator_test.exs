@@ -72,6 +72,7 @@ defmodule Dmage.CalculatorRangeTest do
   end
 
   test "resolve probable" do
+    #normal
     assert {3.0, 0.67} == Calculator.resolve({2.0, 2/3}, {1.0, 0.5}, {3, 4})
     assert {4.5, 0.0} == Calculator.resolve({2.5, 1}, {1.0, 1}, {3, 4})
     assert {2.0, 7.5} == Calculator.resolve({2, 2}, {1.0, 0.5}, {2, 5})
