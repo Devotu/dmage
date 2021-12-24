@@ -57,11 +57,7 @@ defmodule Dmage.Range.Runner do
     |> Float.round(2)
   end
 
-  defp convert_saves({_hits_normal, 0}, saves, _damage) do
-    saves
-  end
-  defp convert_saves(_hits, {saves_normal, _saves_crit} = saves, _damage)
-  when saves_normal < 2 do
+  defp convert_saves({_hits_normal, 0}, {_saves_normal, 0} = saves, _damage) do
     saves
   end
   defp convert_saves({_hits_normal, hits_crit}, {_saves_normal, saves_crit} = saves, _damage)
@@ -72,6 +68,10 @@ defmodule Dmage.Range.Runner do
   when saves_crit > hits_crit do
     excess_crit_saves = saves_crit - hits_crit
     {saves_normal + excess_crit_saves, saves_crit - excess_crit_saves}
+  end
+  defp convert_saves(_hits, {saves_normal, _saves_crit} = saves, _damage)
+  when saves_normal < 2 do
+    saves
   end
   defp convert_saves(hits, saves, {damage_normal, damage_crit} = damage)
   when damage_crit >= 2 * damage_normal do
