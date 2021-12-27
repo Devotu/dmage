@@ -1,6 +1,7 @@
 defmodule Dmage.RangeRunnerTest do
   use ExUnit.Case
 
+  alias Dmage.Benchmark
   alias Dmage.Range.Runner
 
   defp includes({t1, t2}, {min1, max1}, {min2, max2}) do
@@ -10,7 +11,7 @@ defmodule Dmage.RangeRunnerTest do
     includes(t1, min, max) and includes(t2, min, max)
   end
   defp includes(value, min, max) do
-    value >= min and value <= max and is_whole value
+    value >= min and value <= max
   end
 
   defp between({t1, t2}, {min1, max1}, {min2, max2}) do
@@ -20,7 +21,7 @@ defmodule Dmage.RangeRunnerTest do
     between(t1, min, max) and between(t2, min, max)
   end
   defp between(value, min, max) do
-    value > min and value < max and is_whole value
+    value > min and value < max
   end
 
   defp is_whole(n) do
@@ -152,5 +153,18 @@ defmodule Dmage.RangeRunnerTest do
     assert {4.0, 0.0} == Runner.resolve({2, 1}, {2, 0}, {2, 4})
 
     assert {2.0, 0.0} == Runner.resolve({1, 2}, {4, 0}, {2, 4})
+  end
+
+  #doubling up on crits not implemented
+  test "average in open" do
+    Benchmark.measure(fn -> Runner.damage_in_open([4, 3, 3, 4, 5], 1_000) end)
+    |> IO.inspect(label: "average 1000 run time")
+    Benchmark.measure(fn -> Runner.damage_in_open([4, 3, 3, 4, 5], 10_000) end)
+    |> IO.inspect(label: "average 10000 run time")
+
+    assert between Runner.damage_in_open([4, 3, 3, 4, 4], 10_000), 5.5, 6 #5.67
+    assert between Runner.damage_in_open([3, 4, 2, 3, 4], 10_000), 1.5, 2 #1.89
+    assert between Runner.damage_in_open([5, 3, 5, 6, 6], 10_000), 17, 18 #17.5
+    assert between Runner.damage_in_open([3, 5, 2, 3, 3], 10_000), 0.8, 1 #0.97
   end
 end

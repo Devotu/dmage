@@ -3,6 +3,26 @@ defmodule Dmage.Range.Runner do
   @defence 3
   @crit 1 #default is 6's crit #to be parameterized
 
+  def damage_in_open(input, runs) do
+    1..runs
+    |> Enum.reduce([], fn _r, acc -> acc ++ [simulate_damage(input, 0)] end)
+    |> Enum.sum()
+    |> then(fn z -> z / runs end)
+  end
+
+  def damage_in_cover(input, runs) do
+    runs
+    |> Enum.reduce([], fn _r, acc -> acc ++ [10] end)
+    |> Enum.sum()
+  end
+
+  def simulate_damage([attacks, skill, damage_normal, damage_crit, save], retained) do
+    hits = attacks(attacks, skill)
+    saves = saves(@defence, save, retained)
+    resolve(hits, saves, {damage_normal, damage_crit})
+    |> Tuple.sum()
+  end
+
   def hits(0, _eyes), do: {0, 0}
   def hits(_dice, 0), do: {0, 0}
   def hits(dice, _eyes) when dice < 0, do: error "dice cannot be negative"
